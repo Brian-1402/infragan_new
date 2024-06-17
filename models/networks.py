@@ -187,6 +187,9 @@ class GANLoss(nn.Module):
             self.loss = nn.BCELoss()
 
     def get_target_tensor(self, input, target_is_real):
+        if isinstance(input, tuple):
+            input = input[0]
+ 
         target_tensor = None
         if target_is_real:
             create_label = ((self.real_label_var is None) or
@@ -206,6 +209,8 @@ class GANLoss(nn.Module):
 
     def __call__(self, input, target_is_real):
         target_tensor = self.get_target_tensor(input, target_is_real)
+        if isinstance(input, tuple):
+            input = input[0]
         return self.loss(input, target_tensor)
 
 

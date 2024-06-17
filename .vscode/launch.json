@@ -1,0 +1,150 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File with Arguments",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": "${command:pickArgs}"
+        },
+        {
+            "name": "Train & Debug Thermal GAN VEDAI - 512",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/train.py",
+            "args": [
+                "--dataset_mode", "VEDAI",
+                "--dataroot", "./datasets/VEDAI",
+                "--name", "thermal_gan_vedai_debug",
+                "--model", "thermal_gan",
+                "--which_model_netG", "unet_512",
+                "--which_model_netD", "unetdiscriminator",
+                "--which_direction", "AtoB",
+                "--input_nc", "3",
+                "--output_nc", "1",
+                "--lambda_A", "100",
+                "--no_lsgan",
+                "--norm", "batch",
+                "--pool_size", "0",
+                "--loadSize", "512",
+                "--fineSize", "512",
+                "--gpu_ids", "0",
+                "--nThreads", "8",
+                "--batchSize", "4",
+                "--save_epoch_freq", "1",
+                "--which_epoch", "latest",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PATH": "/home/brian/miniconda3/envs/infragan/bin:${env:PATH}",
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            
+        },
+
+        {
+            "name": "Test & Debug Thermal GAN Freiburg - 512",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "args": [
+                "--dataset_mode", "VEDAI",
+                "--dataroot", "./datasets/fr",
+                "--name", "thermal_gan_vedai",
+                "--model", "thermal_gan",
+                "--which_model_netG", "unet_512",
+                "--which_model_netD", "unetdiscriminator",
+                "--which_direction", "AtoB",
+                "--input_nc", "3",
+                "--output_nc", "1",
+                "--lambda_A", "100",
+                "--no_lsgan",
+                "--norm", "batch",
+                "--pool_size", "0",
+                "--loadSize", "512",
+                "--fineSize", "512",
+                "--gpu_ids", "0",
+                "--nThreads", "8",
+                "--batchSize", "4",
+                "--continue_train", "False",
+                "--which_epoch", "latest",
+                "--results_dir", "./results/thermal_gan_vedai/",
+                "--phase", "test"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PATH": "/home/brian/miniconda3/envs/infragan/bin:${env:PATH}",
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Test & Debug Thermal GAN Freiburg - 512 with Visdom Server",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "args": [
+                "--dataset_mode", "VEDAI",
+                "--dataroot", "./datasets/VEDAI",
+                "--name", "thermal_gan_vedai",
+                "--model", "infragan",
+                "--which_model_netG", "unet_512",
+                "--which_model_netD", "unetdiscriminator",
+                "--which_direction", "AtoB",
+                "--input_nc", "3",
+                "--output_nc", "1",
+                "--lambda_A", "100",
+                "--no_lsgan",
+                "--norm", "batch",
+                "--pool_size", "0",
+                "--loadSize", "512",
+                "--fineSize", "512",
+                "--gpu_ids", "0",
+                "--nThreads", "8",
+                "--batchSize", "4",
+                "--continue_train", "False",
+                "--which_epoch", "latest",
+                "--results_dir", "./results/thermal_gan_vedai/",
+                "--phase", "test"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PATH": "/home/brian/miniconda3/envs/infragan/bin:${env:PATH}",
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "preLaunchTask": "Start Visdom Server"
+        }
+    ],
+    "tasks": [
+        {
+            "label": "Start Visdom Server",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "visdom.server"
+            ],
+            "isBackground": true,
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Debug with Visdom Server",
+            "configurations": ["Start Visdom Server", "Test & Debug Thermal GAN Freiburg - 512 with Visdom Server"]
+        }
+    ],
+}
