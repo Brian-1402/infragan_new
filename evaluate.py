@@ -77,7 +77,7 @@ model = create_model(opt)
 # test
 mssim_obj = MSSSIM(channel=1)
 ssim_obj = SSIM()
-lpips_obj = LPIPS(pretrained=False)
+lpips_obj = LPIPS()
 L1_obj = torch.nn.L1Loss()
 metrics = {}
 visualize = False

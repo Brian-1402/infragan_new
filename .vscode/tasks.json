@@ -15,18 +15,18 @@
                 "cwd": "${workspaceFolder}"
             },
             "runOptions": {
-                "runOn": "folderOpen"
-            }
+                "runOn": "folderOpen",
+            },
         },
         {
-            "label": "Train Thermal GAN VEDAI - 512",
+            "label": "Train Thermal GAN VEDAI",
             "type": "shell",
             "command": "python",
             "args": [
                 "${workspaceFolder}/train.py",
                 "--dataset_mode", "VEDAI",
-                "--dataroot", "./datasets/fr",
-                "--name", "thermal_gan_vedai2",
+                "--dataroot", "./datasets/VEDAI",
+                "--name", "thermal_gan_vedai",
                 "--model", "thermal_gan",
                 "--which_model_netG", "unet_512",
                 "--which_model_netD", "unetdiscriminator",
@@ -43,7 +43,6 @@
                 "--nThreads", "8",
                 "--batchSize", "4",
                 "--save_epoch_freq", "1",
-                "--which_epoch", "latest",
             ],
             "options": {
                 "env": {
@@ -54,6 +53,40 @@
             "problemMatcher": []
         },
         
+        {
+            "label": "Train InfraGAN VEDAI",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/train.py",
+                "--dataset_mode", "VEDAI",
+                "--dataroot", "./datasets/VEDAI",
+                "--name", "infragan_vedai",
+                "--model", "infragan",
+                "--which_model_netG", "unet_512",
+                "--which_model_netD", "unetdiscriminator",
+                "--which_direction", "AtoB",
+                "--input_nc", "3",
+                "--output_nc", "1",
+                "--lambda_A", "100",
+                "--no_lsgan",
+                "--norm", "batch",
+                "--pool_size", "0",
+                "--loadSize", "512",
+                "--fineSize", "512",
+                "--gpu_ids", "0",
+                "--nThreads", "8",
+                "--batchSize", "4",
+                "--save_epoch_freq", "1",
+            ],
+            "options": {
+                "env": {
+                    "PATH": "/home/brian/miniconda3/envs/infragan/bin:${env:PATH}",
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        },
         {
             "label": "Evaluate Thermal GAN VEDAI",
             "type": "shell",
@@ -95,11 +128,19 @@
             "label": "Train Thermal GAN VEDAI with Visdom Server",
             "dependsOn": [
                 "Start Visdom Server",
-                "Train Thermal GAN VEDAI - 512"
+                "Train Thermal GAN VEDAI"
             ],
             "dependsOrder": "parallel"
         },
 
+        {
+            "label": "Train InfraGAN VEDAI with Visdom Server",
+            "dependsOn": [
+                "Start Visdom Server",
+                "Train InfraGAN VEDAI"
+            ],
+            "dependsOrder": "parallel"
+        },
     ],
 
 
