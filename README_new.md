@@ -104,7 +104,7 @@ python train.py --dataset_mode VEDAI --dataroot ./datasets/VEDAI --name infragan
 
 ### Train ThermalGAN model on VEDAI dataset:
 ```bash
-python train.py --dataset_mode VEDAI --dataroot ./datasets/fr --name thermal_gan_vedai --model thermal_gan --which_model_netG unet_512 --which_model_netD unetdiscriminator --which_direction AtoB --input_nc 3 --output_nc 1 --lambda_A 100 --no_lsgan --norm batch --pool_size 0 --loadSize 512 --fineSize 512 --gpu_ids 0 --nThreads 8 --batchSize 4 --save_epoch_freq 1
+python train.py --dataset_mode VEDAI --dataroot ./datasets/freiburg_as_vedai --name thermal_gan_vedai --model thermal_gan --which_model_netG unet_512 --which_model_netD unetdiscriminator --which_direction AtoB --input_nc 3 --output_nc 1 --lambda_A 100 --no_lsgan --norm batch --pool_size 0 --loadSize 512 --fineSize 512 --gpu_ids 0 --nThreads 8 --batchSize 4 --save_epoch_freq 1
 ```
 
 ### Evaluate ThermalGAN model on VEDAI dataset:
@@ -112,3 +112,17 @@ python train.py --dataset_mode VEDAI --dataroot ./datasets/fr --name thermal_gan
 python evaluate.py --dataset_mode VEDAI --dataroot ./datasets/fr --name thermal_gan_vedai --model thermal_gan --which_model_netG unet_512 --which_model_netD unetdiscriminator --which_direction AtoB --input_nc 3 --output_nc 1 --lambda_A 100 --no_lsgan --norm batch --pool_size 0 --loadSize 512 --fineSize 512 --gpu_ids 0 --nThreads 8 --batchSize 4 --continue_train False --which_epoch latest --results_dir ./results/thermal_gan_vedai/ 
 ```
 - Further details and unsuccessful attempts are mentioned in `thermalgan input options.md`.
+
+
+
+trying rn:
+
+#### ThermalGAN frieburg, 256 sizes, works!
+```bash
+python train.py --dataset_mode VEDAI --dataroot ./datasets/freiburg_as_vedai --name thermal_gan_vedai --model thermal_gan --which_model_netG unet_256 --which_model_netD unetdiscriminator --which_direction AtoB --input_nc 3 --output_nc 1 --lambda_A 100 --no_lsgan --norm batch --pool_size 0 --loadSize 256 --fineSize 256 --gpu_ids 0 --nThreads 8 --batchSize 1 --save_epoch_freq 1
+```
+
+#### InfraGAN frieburg, 256 sizes, works!
+```bash
+python train.py --dataset_mode VEDAI --dataroot ./datasets/freiburg_as_vedai --name infragan_vedai --model infragan --which_model_netG unet_256 --which_model_netD unetdiscriminator --which_direction AtoB --input_nc 3 --output_nc 1 --lambda_A 100 --no_lsgan --norm batch --pool_size 0 --loadSize 256 --fineSize 256 --gpu_ids 0 --nThreads 8 --batchSize 1 --save_epoch_freq 1
+```
