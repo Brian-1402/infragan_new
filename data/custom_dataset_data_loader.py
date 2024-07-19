@@ -13,7 +13,7 @@ def CreateDataset(opt):
     elif opt.dataset_mode == 'single':
         from data.single_dataset import SingleDataset
         dataset = SingleDataset()
-    elif opt.dataset_mode in ['thermal', 'KAIST', 'BUTR', 'VEDAI']:
+    elif opt.dataset_mode in ['thermal', 'KAIST', 'KAIST_new', 'FLIR_new', 'BUTR', 'VEDAI']:
         from data.thermal_dataset import ThermalDataset
         dataset = ThermalDataset()
     elif opt.dataset_mode == 'FLIR':

@@ -25,8 +25,8 @@ def thermal_tensor2im(image_tensor, imtype=np.uint8):
     image_numpy =  np.transpose(image_numpy, (1, 2, 0))
     tmin = np.min(image_numpy)
     tmax = np.max(image_numpy)
-    print('tmin: ' + str(tmin))
-    print('tmax: ' + str(tmax))
+    # print('tmin: ' + str(tmin))
+    # print('tmax: ' + str(tmax))
     # TEMP
     #tmin = 16
     #tmax = 33
@@ -56,8 +56,8 @@ def thermal_rel_tensor2im(image_tensor, label_tensor, imtype=np.uint8):
     image_numpy = result_numpy
     tmin = np.min(image_numpy)
     tmax = np.max(image_numpy)
-    print('tmin: ' + str(tmin))
-    print('tmax: ' + str(tmax))
+    # print('tmin: ' + str(tmin))
+    # print('tmax: ' + str(tmax))
     d = tmax - tmin
     image_numpy = (image_numpy - tmin) / d * 255.0
     return image_numpy.astype(imtype)

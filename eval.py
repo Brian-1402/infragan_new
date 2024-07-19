@@ -6,12 +6,8 @@ import torch.utils.data
 class Evalulate:
     def __init__(self, opt):
         mode="test"
-        if opt.dataset_mode == 'VEDAI':
+        if opt.dataset_mode in ['VEDAI', 'KAIST', 'KAIST_new', 'FLIR_new']:
             dataset = ThermalDataset()
-            dataset.initialize(opt, mode="test")
-        elif opt.dataset_mode == 'KAIST':
-            dataset = ThermalDataset()
-            # mode = '/cta/users/mehmet/rgbt-ped-detection/data/scripts/imageSets/test-all-20.txt'
             dataset.initialize(opt, mode=mode)
         elif opt.dataset_mode == 'FLIR':
             dataset = FlirDataset()

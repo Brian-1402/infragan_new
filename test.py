@@ -19,12 +19,8 @@ opt.serial_batches = True  # no shuffle
 opt.no_flip = True  # no flip
 
 mode="test"
-if opt.dataset_mode == 'VEDAI':
+if opt.dataset_mode in ['VEDAI', 'KAIST', 'KAIST_new', 'FLIR_new']:
     dataset = ThermalDataset()
-    dataset.initialize(opt, mode="test")
-elif opt.dataset_mode == 'KAIST':
-    dataset = ThermalDataset()
-    # mode = '/cta/users/mehmet/rgbt-ped-detection/data/scripts/imageSets/test-all-20.txt'
     dataset.initialize(opt, mode=mode)
 elif opt.dataset_mode == 'FLIR':
     dataset = FlirDataset()
@@ -46,14 +42,16 @@ visualizer = Visualizer(opt)
 web_dir = os.path.join(opt.results_dir, opt.name, '%s_%s' % (opt.phase, opt.which_epoch))
 webpage = html.HTML(web_dir, 'Experiment = %s, Phase = %s, Epoch = %s' % (opt.name, opt.phase, opt.which_epoch))
 # test
-for i, data in enumerate(dataset):
+from tqdm import tqdm
+for i, data in enumerate(tqdm(dataloader)):
     if i >= opt.how_many:
         break
     model.set_input(data)
     model.test()
     visuals = model.get_current_visuals()
     img_path = model.get_image_paths()
-    print('%04d: process image... %s' % (i, img_path))
+    # print('%04d: process image... %s' % (i, img_path))
+    tqdm.write(f'{i:04d}: process image... {img_path}')
     visualizer.save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio)
 
 webpage.save()

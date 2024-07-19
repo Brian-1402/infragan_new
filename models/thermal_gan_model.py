@@ -21,7 +21,7 @@ class ThermalGANModel(BaseModel):
                                       opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids)
         if self.isTrain or True:
             use_sigmoid = True # opt.no_lsgan
-            res = opt.loadSize # ! Quickfix: Not sure about this, personally feel that loadSize represents resolution more closely.
+            res = opt.resolution # ! Quickfix: Not sure about this
             self.netD = networks.define_D(opt.input_nc + opt.output_nc, opt.ndf,
                                           opt.which_model_netD,
                                           opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type, self.gpu_ids, resolution=res)
@@ -64,7 +64,7 @@ class ThermalGANModel(BaseModel):
             input_B = input_B.cuda(self.gpu_ids[0], non_blocking=True)
         self.input_A = input_A
         self.input_B = input_B
-        # self.image_paths = input['A_paths' if AtoB else 'B_paths']
+        self.image_paths = input['A_paths' if AtoB else 'B_paths']
 
     def forward(self):
         self.real_A = Variable(self.input_A)

@@ -23,7 +23,7 @@ class InfraGAN(BaseModel):
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
 
-            res=256 if opt.dataset_mode == 'FLIR' else opt.loadSize # ! Quickfix: Not sure about this, personally feel that loadSize represents resolution more closely.
+            res=256 if opt.dataset_mode == 'FLIR' else opt.resolution # ! Quickfix: Not sure about this
 
             self.netD = networks.define_D(opt.input_nc + opt.output_nc, opt.ndf,
                                           opt.which_model_netD,
@@ -68,7 +68,7 @@ class InfraGAN(BaseModel):
             input_B = input_B.cuda(self.gpu_ids[0], non_blocking=True)
         self.input_A = input_A
         self.input_B = input_B
-        #self.image_paths = input['A_paths' if AtoB else 'B_paths']
+        self.image_paths = input['A_paths' if AtoB else 'B_paths']
 
     def forward(self):
         self.real_A = Variable(self.input_A)

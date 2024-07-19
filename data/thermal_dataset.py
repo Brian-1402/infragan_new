@@ -41,6 +41,59 @@ def make_thermal_dataset_kaist(path=None, text_path=None):
     np.random.shuffle(images)
     return images
 
+#! New function to handle sanitized KAIST dataset
+def make_thermal_dataset_kaist_sanitized(path):
+    lwir_path = os.path.join(path, 'lwir')
+    visible_path = os.path.join(path, 'visible')
+
+    assert os.path.isdir(lwir_path), '%s is not a valid directory' % lwir_path
+    assert os.path.isdir(visible_path), '%s is not a valid directory' % visible_path
+
+    lwir_files = sorted([f for f in os.listdir(lwir_path) if os.path.isfile(os.path.join(lwir_path, f))])
+    visible_files = sorted([f for f in os.listdir(visible_path) if os.path.isfile(os.path.join(visible_path, f))])
+
+    images = []
+    for lwir_file, visible_file in zip(lwir_files, visible_files):
+        path_ir = os.path.join(lwir_path, lwir_file)
+        path_rgb = os.path.join(visible_path, visible_file)
+        
+        assert os.path.isfile(path_rgb), '%s is not a valid file' % path_rgb
+        assert os.path.isfile(path_ir), '%s is not a valid file' % path_ir
+        
+        images.append({'A': path_rgb, 'B': path_ir, "annotation_file": "blank"})
+        #! For now have put blank for annotation file, assuming it's not gonna be used later.
+
+    np.random.seed(12)
+    np.random.shuffle(images)
+    return images
+
+def make_thermal_dataset_flir_aligned(path):
+    jpeg_images_path = os.path.join(path, 'JPEGImages')
+    
+    assert os.path.isdir(jpeg_images_path), '%s is not a valid directory' % jpeg_images_path
+    
+    images = []
+    
+    for filename in sorted(os.listdir(jpeg_images_path)):
+        if not os.path.isfile(os.path.join(jpeg_images_path, filename)):
+            continue
+        
+        if "PreviewData" in filename:
+            ir_file = filename
+            visible_file = filename.replace("PreviewData", "RGB")
+            visible_file = visible_file.replace("jpeg", "jpg")
+            
+            path_ir = os.path.join(jpeg_images_path, ir_file)
+            path_rgb = os.path.join(jpeg_images_path, visible_file)
+            
+            assert os.path.isfile(path_rgb), '%s is not a valid file' % path_rgb
+            assert os.path.isfile(path_ir), '%s is not a valid file' % path_ir
+            
+            images.append({'A': path_rgb, 'B': path_ir, "annotation_file": "blank"})
+    
+    np.random.seed(12)
+    np.random.shuffle(images)
+    return images
 
 def make_thermal_dataset_VEDAI(path):
     images = []
@@ -66,6 +119,10 @@ class ThermalDataset(BaseDataset):
             self.AB_paths = make_thermal_dataset_VEDAI(os.path.join(opt.dataroot, mode))
         elif opt.dataset_mode == 'KAIST':
             self.AB_paths = make_thermal_dataset_kaist(path=opt.dataroot, text_path=opt.text_path)
+        elif opt.dataset_mode == 'KAIST_new':
+            self.AB_paths = make_thermal_dataset_kaist_sanitized(os.path.join(opt.dataroot, mode))
+        elif opt.dataset_mode == 'FLIR_new':
+            self.AB_paths = make_thermal_dataset_flir_aligned(os.path.join(opt.dataroot, mode))
         assert(opt.resize_or_crop == 'resize_and_crop')
 
     def __getitem__(self, index):
