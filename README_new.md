@@ -11,6 +11,8 @@ conda env create -f environment.yml
 
 - Multi-GPU processing can be attempted by passing in `--gpu_ids 0,1` etc. instead of just `--gpu_ids 0`.
 
+<div style="page-break-after: always;"></div>
+
 ### For 256 resolution training
 
 #### ThermalGAN VEDAI
@@ -33,7 +35,7 @@ python train.py --dataset_mode KAIST_new --dataroot ./datasets/KAIST_sample --na
 python train.py --dataset_mode FLIR_new --dataroot ./datasets/FLIR_sample --name infragan_flir --model infragan --which_model_netG unet_256 --which_model_netD unetdiscriminator --which_direction AtoB --input_nc 3 --output_nc 1 --lambda_A 100 --no_lsgan --norm batch --pool_size 0 --loadSize 256 --fineSize 256 --gpu_ids 0 --nThreads 8 --batchSize 1 --save_epoch_freq 1 --resolution 256
 ```
 
-
+<div style="page-break-after: always;"></div>
 
 ### For 256 resolution testing
 > Note: Need to specify total number of images being processed in the `--how_many` flag, default is 10000 upper limit
@@ -58,6 +60,8 @@ python test.py --dataset_mode KAIST_new --dataroot ./datasets/KAIST_sample --nam
 python test.py --dataset_mode FLIR_new --dataroot ./datasets/FLIR_sample --name infragan_flir --model infragan --which_model_netG unet_256 --which_model_netD unetdiscriminator --which_direction AtoB --input_nc 3 --output_nc 1 --norm batch --loadSize 256 --fineSize 256 --gpu_ids 0 --nThreads 8 --batchSize 4 --how_many 5 --resolution 256
 ```
 
+<div style="page-break-after: always;"></div>
+
 ## Required Dataset Structure
 
 ### `VEDAI` dataset mode
@@ -76,8 +80,6 @@ dataset_directory/
 │   ├── 00001003_ir.png
 │   └── ...
 ```
-- Here, `<name>_co.png` is the RGB file, and `<name>_ir.png` is the thermal image file.
-- Has been tested to work.
 
 ### `KAIST_new` dataset mode
 
@@ -102,6 +104,8 @@ dataset_directory/
 │   │   └── set00_V000_I01232_2.jpg
 │   │   └── ...
 ```
+
+<div style="page-break-after: always;"></div>
 
 ## `FLIR_new` dataset mode
 ```
