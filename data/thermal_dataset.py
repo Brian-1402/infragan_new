@@ -108,6 +108,29 @@ def make_thermal_dataset_VEDAI(path):
             images.append({'A': path_tv, 'B': path_ir, "annotation_file": annotation_file})
     return images
 
+import re
+
+def make_thermal_dataset_VEDAI_cropped(path):
+    images = []
+    assert os.path.isdir(path), '%s is not a valid directory' % path
+
+    pattern = re.compile(r"(\d{8})_co_([0-3])\.png")
+
+    for fname in sorted(os.listdir(path)):
+        if is_image_file(fname):
+            match = pattern.match(fname)
+            if match:
+                base = match.group(1)  # \d{8}
+                index = match.group(2)  # [0-3]
+                
+                path_tv = os.path.join(path, fname)
+                path_ir = os.path.join(path, f"{base}_ir_{index}.png")
+                # annotation_file = os.path.join(path, "..", "Annotations1024", f"{base}_{index}.txt")
+                annotation_file = ""
+                
+                images.append({'A': path_tv, 'B': path_ir, "annotation_file": annotation_file})
+    
+    return images
 
 class ThermalDataset(BaseDataset):
     def initialize(self, opt, mode='train'):
@@ -116,7 +139,7 @@ class ThermalDataset(BaseDataset):
         self.root = opt.dataroot
         self.dir_AB = os.path.join(opt.dataroot, opt.phase)
         if opt.dataset_mode =='VEDAI':
-            self.AB_paths = make_thermal_dataset_VEDAI(os.path.join(opt.dataroot, mode))
+            self.AB_paths = make_thermal_dataset_VEDAI_cropped(os.path.join(opt.dataroot, mode))
         elif opt.dataset_mode == 'KAIST':
             self.AB_paths = make_thermal_dataset_kaist(path=opt.dataroot, text_path=opt.text_path)
         elif opt.dataset_mode == 'KAIST_new':
